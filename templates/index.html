@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Skill Support (SSS)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        body {
+            background: linear-gradient(120deg, #4e73df, #1cc88a);
+            color: #333;
+            font-family: Arial, sans-serif;
+        }
+
+        #main-wrapper {
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .card {
+            border: none;
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        .text-theme {
+            color: #4e73df;
+        }
+
+        .account-block {
+            background: url("/static/images/img.png") no-repeat center center/cover;
+            position: relative;
+            height: 100%;
+        }
+
+        .account-block .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        .account-testimonial {
+            position: absolute;
+            bottom: 2rem;
+            left: 2rem;
+            color: #ffffff;
+        }
+
+        #transcripts-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        #transcripts-section li {
+            margin-bottom: 10px;
+        }
+
+        #files_clear {
+            margin-top: 20px;
+        }
+
+        .btn-primary {
+            background-color: #4e73df;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #375a7f;
+        }
+
+        .btn-secondary {
+            background-color: #858796;
+            border: none;
+        }
+
+        .btn-secondary:hover {
+            background-color: #6c757d;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        #sessionForm {
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="main-wrapper" class="container mt-5 p-4">
+        <div class="row justify-content-center">
+            <div class="col-xl-10">
+                <div class="card border-0">
+                    <div class="card-body p-0">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="p-5">
+                                    <div class="mb-5">
+                                        <h3 class="h4 font-weight-bold text-theme">Smart Skill Support (SSS)</h3>
+                                    </div>
+                                    <h6 class="h5 mb-0">AIMLCZG628T Dissertation</h6>
+                                    <p class="text-primary mt-3 mb-5">Deepak J Bhat ~ 2022AC05034</p>
+                                    <form method="post" id="sessionForm" enctype="multipart/form-data" action="/">
+                                        <div class="form-group">
+                                            <label for="fileID" class="form-label">Upload Files:</label>
+                                            <input type="file" id="fileID" name="files" accept=".docx, .pdf, .mp4, .wav, .mp3, .png, .jpeg, .jpg" multiple required class="form-control-file" />
+                                        </div>
+                                        <button type="submit" class="btn btn-primary w-100">Submit File/Files</button>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 d-none d-lg-block">
+                                <div class="account-block rounded">
+                                    <div class="overlay"></div>
+                                    <div class="account-testimonial">
+                                        <p class="lead text-white">"Click on Qdrant button to integrate"</p>
+                                        <a href="/chatbot" class="btn btn-primary">Qdrant</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Transcripts Section -->
+                        <div id="transcripts-section" class="mt-5">
+                            <h4 class="mb-4">Processed Files</h4>
+                            <div>
+                                <ul class="list-group">
+                                    {% for file in transcript_files %}
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        {{ file }}
+                                        <span>
+                                            <a href="{{ url_for('download_file', filename=file) }}" class="btn btn-sm btn-primary me-2">Download</a>
+                                            <a href="{{ url_for('view_file', filename=file) }}" target="_blank" class="btn btn-sm btn-secondary">View</a>
+                                        </span>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div id="files_clear" class="mt-3 text-center">
+                            <a href="{{url_for('delete_all_files')}}" class="btn btn-danger">Clear All</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
