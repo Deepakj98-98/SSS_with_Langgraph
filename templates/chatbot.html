@@ -116,6 +116,16 @@
     </div>
 
     <script>
+        function generateSessionId() {
+        return 'session-' + Math.random().toString(36).substr(2, 9);
+    }
+
+    // Check if session_id exists, otherwise create a new one
+    let session_id = localStorage.getItem('chatbot_session_id');
+    if (!session_id) {
+        session_id = generateSessionId();
+        localStorage.setItem('chatbot_session_id', session_id);
+    }
         document.getElementById('voice-btn').addEventListener('click', async function () {
         try {
             const response = await fetch('/chatbot/voice', { method: 'POST' });
@@ -156,7 +166,7 @@
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ user_input: userInput, role:role })
+                    body: JSON.stringify({ session_id:session_id,user_input: userInput, role:role })
                 });
 
                 const result = await response.json();

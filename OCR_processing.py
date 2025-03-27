@@ -7,7 +7,7 @@ from PIL import Image
 from docx import Document
 
 class OCR_processing:
-    def pdf_text(self,filepath):
+    def ocr_pdf_text(self,filepath):
          final_text=[]
          pytesseract.tessseract_cmd=r'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
          output_dir="frames"
@@ -15,18 +15,23 @@ class OCR_processing:
          os.makedirs(output_dir,exist_ok=True)
          images=convert_from_path(filepath, poppler_path=pop_path,  output_folder=output_dir, fmt='jpeg')
 
-         for image_file in os.list_dir(output_dir):
+         for image_file in os.listdir(output_dir):
               image_path=os.path.join(output_dir,image_file)
               with Image.open(image_path) as img:
                    text=pytesseract.image_to_string(img)
                    final_text.append(text)
                    img.close()
          ocr_text="".join(final_text)
-         shutil.rmtree(ocr_text)
-         cleaned_text = re.sub(r'[^A-Za-z0-9\s.,]', '', text)
+         return ocr_text
+
+    def pdf_text(self,filepath):
+         output_dir="frames"
+         ocr_text=self.ocr_pdf_text(filepath)
+         shutil.rmtree(output_dir)
+         cleaned_text = re.sub(r'[^A-Za-z0-9\s.,]', '', ocr_text)
          cleaned_text1 = re.sub(r'[^\x20-\x7E\n]', '', cleaned_text)
          return cleaned_text1
-
+    
     def doc_text(self, filepath):
          doc=Document(filepath)
          if doc.paragraphs:

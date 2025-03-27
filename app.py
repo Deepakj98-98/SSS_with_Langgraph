@@ -27,18 +27,18 @@ class FileProcessor:
         return uploaded_file_paths
             
     def process_files(self,filepaths):
-        text=""
         for file in filepaths:
+            text=""
             extension=os.path.splitext(file)[1].lower()
             if extension in (".mp4",".mp3",".wav"):
                 text+=self.transcripts.process_audio_video(file)
             elif extension in (".doc",".docx"):
                 text+=self.ocr.doc_text(file)
             elif extension==".pdf":
-                text+=self.ocr.pdf_text
+                text+=self.ocr.pdf_text(file)
             elif extension in (".png",".jpg",".jpeg"):
                 text+=self.image_processing.image_extraction(file)
-        self.save_text_file(file, text)
+            self.save_text_file(file, text)
 
     def save_text_file(self, file, text):
         base_name=os.path.basename(file)
@@ -52,11 +52,11 @@ app=Flask(__name__)
 UPLOAD_FOLDER = ["uploads"]
 file_processor = FileProcessor(UPLOAD_FOLDER[0])
 qdrant_chunking = QdrantChunking()
-collection_name="test_check"
+collection_name="test_check1"
 query_processor=Qdrant_retrieval(collection_name)
 graph_runner=Chatbot_response()
 r = sr.Recognizer()
-
+conversations={}
 @app.route("/",methods=["GET","POST"])
 def home():
     if request.method=="POST":
@@ -100,20 +100,37 @@ def chatbot():
 @app.route("/chatbot/query", methods=["POST"])
 def chatbot_query():
     try:
+        session_id=request.json.get("session_id")
+        print(session_id)
         role=request.json.get("role")
         user_input = request.json.get("user_input")
         print(f"role is {role}")
         if not user_input:
             return jsonify({"error": "Invalid input"}), 400
+        
+        previous_answer=[]
+        previous_question=""
+        if session_id in conversations:
+            previous_question=conversations[session_id].get("previous_question","")
+            previous_answer=conversations[session_id].get("previous_answer",[])
 
         # Process user query through DissertationQueryProcessor
         retrieved_chunks = query_processor.qdrant_retrieve(user_input)
         input_state = {
         "retreived_chunks": retrieved_chunks,
         "role": role,
-        "model": "mistral"
+        "model": "mistral",
+        "previous_question":previous_question,
+        "previous_answer":previous_answer,
+        "current_question":user_input
     }
         response=graph_runner.run(input_state)
+
+        #updating session memory
+        conversations[session_id]={
+            "previous_question":user_input,
+            "previous_answer":response["rephrased_chunks"]
+        }
         return jsonify({"response": response["rephrased_chunks"]}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -178,5 +195,5 @@ def voice_input():
         return jsonify({'error': 'Could not understand audio'}), 400
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)
 
