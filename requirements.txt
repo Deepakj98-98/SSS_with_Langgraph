@@ -1,0 +1,46 @@
+# Flask app and API handling
+Flask
+
+# MongoDB & GridFS
+pymongo
+
+# Async handling & HTTP
+aiohttp
+
+# LangGraph & LangChain
+langgraph==0.3.18
+langchain
+langchain-community
+langchain-qdrant
+
+# Qdrant vector store
+qdrant-client
+
+# Hugging Face embeddings
+sentence-transformers
+
+# Environment management
+python-dotenv
+
+# Whisper for audio transcription
+git+https://github.com/openai/whisper.git
+torch  # Required by Whisper
+
+# Audio processing
+pydub
+
+# OCR and document/image handling
+pytesseract
+pdf2image
+python-docx
+Pillow
+opencv-python
+numpy
+
+# Text processing
+spacy
+
+# Other utils
+SpeechRecognition
+
+ollama
