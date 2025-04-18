@@ -37,5 +37,4 @@ SSS is an intelligent, role-aware chatbot system that processes multi-modal inpu
 ### 1. Clone the Repo
 
 ```bash
-git clone https://github.com/yourusername/SSS-chatbot.git
-cd SSS-chatbot
+git clone https://github.com/Deepakj98-98/SSS_with_Langgraph.git
