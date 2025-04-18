@@ -1,6 +1,7 @@
 # SSS: Smart Skill Support
 
-SSS is an intelligent, role-aware chatbot system that processes multi-modal inputs (text, audio, images, documents), rephrases content based on user roles, and responds intelligently using LangGraph, Ollama, Whisper, OCR, and Qdrant.
+SSS is an intelligent, role-aware chatbot system that processes multi-modal inputs (text, audio, images, documents), rephrases content based on user roles, and responds intelligently using LangGraph, Ollama, Whisper, OCR, and Qdrant. 
+This application can also support in automating the upskilling or skill training for onboarded resources by curating content based on the user’s skill/role.
 
 ---
 
